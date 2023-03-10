@@ -1,0 +1,64 @@
+int tempin= A0;
+int flex1=A4;
+int flex2=A3;
+int heartrate=10;
+int k=0;
+unsigned rate=0;
+unsigned long time2,time1;
+unsigned long time;
+
+void setup() {
+Serial.begin(9600);
+pinMode(tempin,INPUT);
+pinMode(flex1,INPUT);
+pinMode(flex2,INPUT);
+pinMode(heartrate,INPUT);
+
+}
+
+void loop() {
+unsigned int temp=analogRead(tempin);
+int sign1=analogRead(flux1);
+int sign2=analogRead(flux2);
+int tem=temp/2;
+
+Serial.print(&quot;Temperature:&quot;);
+Serial.println((tem*1.8)+32);
+delay(500);
+
+Serial.print(&quot;flux1:&quot;);
+Serial.println(sign1);
+delay(500);
+Serial.print(&quot;flux2:&quot;);
+Serial.println(sign2);
+delay(500);
+
+if((sign1&gt;55) &amp;&amp; (sign2&lt;35))
+{
+Serial.println(&quot;Need water&quot;);
+}
+if((sign1&lt;50) &amp;&amp; (sign2&gt;40))
+{
+Serial.println(&quot;Rest Room&quot;);
+}
+k=0;
+Serial.println(&quot;Please wait.......&quot;);
+while(k&lt;5)
+{
+if(digitalRead(heartrate))
+{
+if(k==0)
+time1=millis();
+k++;
+while(digitalRead(heartrate));
+}
+}
+
+time2=millis();
+rate=time2-time1;
+rate=rate/4;
+rate=(60000/rate)-10;
+Serial.print(&quot;Heart Beat Rate:&quot;);
+Serial.println(rate);
+
+}
